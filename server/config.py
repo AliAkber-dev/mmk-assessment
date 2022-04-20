@@ -18,11 +18,11 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG=True
     DB_NAME = "db_mmk"
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=Config.DB_USER,pw=Config.DB_PASS,url=Config.DB_HOST,db=Config.DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=Config.DB_USER,pw=Config.DB_PASS,url=Config.DB_HOST,db=DB_NAME)
     
 class TestingConfig(Config):
     TESTING=True
     DB_NAME="testing-db"
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=Config.DB_USER,pw=Config.DB_PASS,url=Config.DB_HOST,db=Config.DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=Config.DB_USER,pw=Config.DB_PASS,url=Config.DB_HOST,db=DB_NAME)
     
 

@@ -1,67 +1,31 @@
 from flask_restful import Resource
 from flask_apispec.views import MethodResource
-from server import db
 from flask_httpauth import HTTPBasicAuth
 auth = HTTPBasicAuth()
-from flask_inputs import Inputs
-from flask_inputs.validators import JsonSchema
-
-schema = {
-   "type": "object",
-   "properties": {
-       "from": {
-           "type": "string",
-           "minLength":6,
-           "maxLength":16
-       },
-       "to":{
-           "type":"string",
-           "minLength":6,
-           "maxLength":16
-       },
-       "text":{
-           "type":"string",
-           "minLength":1,
-           "maxLength":120
-       }
-   }
-}
+from wtforms.validators import ValidationError
+from server.models import Account
 
 @auth.verify_password
 def verify_password(username, password):
     if (not (username and password)):
         return False
-    return USER_DATA.get(username) == password
+    account = Account.query.filter_by(username=username, auth_id=password).first()
+    return account if(account) else False 
 
-
-class InboundInputs(Inputs):
-    schema["required"] = ["from"]
-    json = [JsonSchema(schema=schema)]
-
-class OutboundInputs(Inputs):
-    schema["required"] = ["from","to"]
-    json = [JsonSchema(schema=schema)]
-
-class InboundAPI(MethodResource,Resource):
-    @auth.login_required
-    def post():
-        request_obj = request.get_json()
-        req = InboundInputs(request)
-        response = {}
-        status_code = 200
-        if(req.validate()):
-            response["message"] = "True"
-            response["status_code"] = str(status_code)
-            if(request_obj["text"].rstrip()=="STOP"):
-                hash = f"STOP_{request_obj['from']}:{request_obj['to']}"
-                redis_client.hset(hash,request_obj["from"],request_obj["to"])
-                redis_client.expire(hash,4*60*60)
-                value = redis_client.hget(hash,request_obj["from"])
-                print(value)
-        else:
-            response["message"] = str(req.errors)
-            status_code = 400
-            response["status_code"] = str(status_code) 
-        return make_response(response,status_code)
-
-    
+def param_validation(form,field):
+    type_check = type(field.data) == str
+    if(not type_check):
+        raise ValidationError(f"{field.name} must be a string")
+    if(type_check):
+        len_check = False
+        upper_limit = 0
+        lower_limit = 0
+        if(field.name == "text"):
+            upper_limit = 120
+            lower_limit = 1
+        if(field.name == "to" or field.name == "from"):
+            upper_limit = 16
+            lower_limit = 6
+        len_check = len(field.data)<lower_limit or len(field.data)>upper_limit
+        if(len_check):
+            raise ValidationError(f"{field.name} length must be atleast {lower_limit}  and at most {upper_limit}")
