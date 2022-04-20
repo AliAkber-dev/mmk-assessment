@@ -1,5 +1,4 @@
-from coding_assignment_mmk import db
-
+from server import db
 class Account(db.Model):
     __tablename__ = "account"
     id=db.Column(db.Integer, primary_key= True)

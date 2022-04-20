@@ -3,14 +3,9 @@ from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
 from flask_httpauth import HTTPBasicAuth
 from flask_redis import FlaskRedis
-
-app = Flask(__name__)
-redis_client = FlaskRedis(app)
-if(app.config["ENV"]=="development"):
-    print("FLASK_ENV set to ",app.config["ENV"])
-    app.config.from_object("config.DevelopmentConfig")
-
-schema_ob = {}
+from flask_sqlalchemy import SQLAlchemy
+from server import app,api
+from server.routes import InboundAPI
 schema = {
    "type": "object",
    "properties": {
@@ -50,28 +45,29 @@ class OutboundInputs(Inputs):
     json = [JsonSchema(schema=schema)]
 
 
-@app.route("/inbound/sms",methods=["POST"])
-@auth.login_required
-def inbound_sms():
-    request_obj = request.get_json()
-    req = InboundInputs(request)
-    response = {}
-    status_code = 200
-    if(req.validate()):
-        response["message"] = "True"
-        response["status_code"] = str(status_code)
-        if(request_obj["text"].rstrip()=="STOP"):
-            hash = f"STOP_{request_obj['from']}:{request_obj['to']}"
-            redis_client.hset(hash,request_obj["from"],request_obj["to"])
-            redis_client.expire(hash,4*60*60)
-            value = redis_client.hget(hash,request_obj["from"])
-            print(value)
-    else:
-        response["message"] = str(req.errors)
-        status_code = 400
-        response["status_code"] = str(status_code) 
-    return make_response(response,status_code)
+# @app.route("/inbound/sms",methods=["POST"])
+# @auth.login_required
+# def inbound_sms():
+#     request_obj = request.get_json()
+#     req = InboundInputs(request)
+#     response = {}
+#     status_code = 200
+#     if(req.validate()):
+#         response["message"] = "True"
+#         response["status_code"] = str(status_code)
+#         if(request_obj["text"].rstrip()=="STOP"):
+#             hash = f"STOP_{request_obj['from']}:{request_obj['to']}"
+#             redis_client.hset(hash,request_obj["from"],request_obj["to"])
+#             redis_client.expire(hash,4*60*60)
+#             value = redis_client.hget(hash,request_obj["from"])
+#             print(value)
+#     else:
+#         response["message"] = str(req.errors)
+#         status_code = 400
+#         response["status_code"] = str(status_code) 
+#     return make_response(response,status_code)
 
+api.add_resource(InboundAPI, '/inbound/sms')
 @app.route("/outbound/sms",methods=["POST"])
 @auth.login_required
 def outbound_sms():
