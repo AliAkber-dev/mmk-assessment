@@ -52,7 +52,8 @@ class OutboundAPI(MethodResource,Resource):
             else:
                 response["error"] = (req.errors)
                 status_code = 400
-        except :
+        except Exception as e:
+            print(e)
             status_code = 500
             response["error"] = "unknown failure" 
         finally:

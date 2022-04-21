@@ -41,7 +41,8 @@ class InboundAPI(MethodResource,Resource):
             else:
                 response["error"] = (req.errors)
                 status_code = 400
-        except:
+        except Exception as e:
+            print(e)
             status_code = 500
             response["message"]=""
             response["error"] = "unknown failure"
