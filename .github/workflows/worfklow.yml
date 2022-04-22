@@ -1,4 +1,4 @@
-name: flask app 
+name: CI-CD Pipeline
 
 on:
   push:
@@ -9,11 +9,8 @@ env:
   DB_HOST: database-1.ciho62q4ldo0.us-east-2.rds.amazonaws.com
   DB_USER: postgres
   DB_PASS: mmkaws*()
-  PROD_REDIS_URL: redis://:@localhost:6379/0
-  TEST_REDIS_URL: redis://:@localhost:6379/1
-  DEV_REDIS_URL: redis://:@localhost:6379/2
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
