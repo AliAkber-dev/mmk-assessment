@@ -13,8 +13,7 @@ env:
   TEST_REDIS_URL: redis://:@localhost:6379/1
   DEV_REDIS_URL: redis://:@localhost:6379/2
 jobs:
-  build:
-  
+  test:
     runs-on: ubuntu-latest
 
     steps:
