@@ -1,0 +1,33 @@
+name: Python application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+env:
+  DB_HOST: database-1.ciho62q4ldo0.us-east-2.rds.amazonaws.com
+  DB_USER: postgres
+  DB_PASS: mmkaws*()
+  PROD_REDIS_URL: redis://:@localhost:6379/0
+  TEST_REDIS_URL: redis://:@localhost:6379/1
+  DEV_REDIS_URL: redis://:@localhost:6379/2
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt;
+        sudo apt-get install -y redis-tools redis-server
+    - name: Test with pytest
+      run: |
+        pytest
