@@ -6,7 +6,7 @@ from server.routes.outbound import OutboundAPI
 from flask_sqlalchemy import SQLAlchemy
 @pytest.fixture(scope="session")
 def flask_app():
-    app = create_app()
+    app = create_app("testing")
     api = Api(app)
     api.add_resource(InboundAPI, '/inbound/sms')
     api.add_resource(OutboundAPI,'/outbound/sms')

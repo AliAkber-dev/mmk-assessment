@@ -12,11 +12,11 @@ conf_dict = {
 redis_client = Redis()
 db = SQLAlchemy()
 
-def create_app(config="development"):
+def create_app(config_name="development"):
     app = Flask(__name__)
-    env = config
-    if(config in list(conf_dict.keys())):
-        env = config
+    env = config_name
+    if(config_name in list(conf_dict.keys())):
+        env = config_name
     elif(app.config["ENV"] in list(conf_dict.keys())):
         env = app.config["ENV"]
     app.config.from_object(conf_dict[env])
