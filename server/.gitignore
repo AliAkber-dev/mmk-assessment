@@ -1,2 +1,4 @@
 schema.*
 *__pycache__*
+.env
+.gitignore
