@@ -1,4 +1,7 @@
 schema.*
-*__pycache__*
+**/__pycache__/**
 .env
 .gitignore
+*-env
+database_dump
+**/.pytest_cache
