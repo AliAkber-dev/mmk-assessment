@@ -2,16 +2,18 @@ from flask_restful import Resource
 from flask_apispec.views import MethodResource
 from flask_httpauth import HTTPBasicAuth
 auth = HTTPBasicAuth()
+from flask import abort
 from wtforms.validators import ValidationError
 from server.models import Account
-
 @auth.verify_password
 def verify_password(username, password):
     if (not (username and password)):
         return False
     account = Account.query.filter_by(username=username, auth_id=password).first()
     return account if(account) else False 
-
+@auth.error_handler
+def unauthorized():
+    abort(403)
 def param_validation(form,field):
     type_check = type(field.data) == str
     if(not type_check):

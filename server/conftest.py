@@ -3,7 +3,7 @@ from server import create_app
 from flask_restful import Api
 from server.routes.inbound import InboundAPI
 from server.routes.outbound import OutboundAPI
-
+from flask_sqlalchemy import SQLAlchemy
 @pytest.fixture(scope="session")
 def flask_app():
     app = create_app()

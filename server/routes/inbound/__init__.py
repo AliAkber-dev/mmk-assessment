@@ -34,7 +34,7 @@ class InboundAPI(MethodResource,Resource):
                         redis_client.hset(hash,request_obj["from"],request_obj["to"])
                         redis_client.expire(hash,4*60*60)
                         value = redis_client.hget(hash,request_obj["from"])
-                        response["message"] = "inbound sms ok"
+                    response["message"] = "inbound sms ok"
                 else:
                     status_code = 404
                     response["error"] = "to parameter not found"
