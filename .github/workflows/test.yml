@@ -1,4 +1,4 @@
-name: Python application
+name: flask app 
 
 on:
   push:
@@ -13,9 +13,8 @@ env:
   TEST_REDIS_URL: redis://:@localhost:6379/1
   DEV_REDIS_URL: redis://:@localhost:6379/2
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
