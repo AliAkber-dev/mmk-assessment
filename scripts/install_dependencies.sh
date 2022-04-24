@@ -1,6 +1,6 @@
 #!/bin/bash
 pip install virtualenv
-cd /home/ubuntu/mmk-assessment
+cd /home/ubuntu/mmk-app
 python -m pip install --upgrade pip
 virtualenv app-env
 source app-env/bin/activate
