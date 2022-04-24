@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/home/mmk-app
+cd /home/ubuntu/mmk-app
 source app-env/bin/activate
 export FLASK_APP=server/app.py
 export FLASK_ENV=production
