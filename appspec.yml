@@ -5,10 +5,10 @@ files:
    destination: /home/ubuntu/mmk-app
 hooks:
   AfterInstall:
-   - location: scripts/install_app_dependencies
+   - location: /home/ubuntu/mmk-app/scripts/install_app_dependencies
      timeout: 300
      runas: root
   ApplicationStart:
-   - location: scripts/start_server
+   - location: /home/ubuntu/mmk-app/scripts//start_server
      timeout: 300
      runas: root
